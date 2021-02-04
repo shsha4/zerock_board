@@ -7,7 +7,6 @@ import org.zerock.board.dto.BoardDTO;
 import org.zerock.board.dto.PageRequestDTO;
 import org.zerock.board.dto.PageResultDTO;
 
-import javax.transaction.Transactional;
 
 @SpringBootTest
 public class BoardServiceTests {

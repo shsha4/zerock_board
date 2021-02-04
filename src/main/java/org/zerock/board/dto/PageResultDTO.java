@@ -26,13 +26,13 @@ public class PageResultDTO<DTO, EN> {
     }
 
     private void makePageList(Pageable pageable) {
-        this.page = pageable.getPageNumber();
+        this.page = pageable.getPageNumber() + 1;
         this.size = pageable.getPageSize();
 
         int tempEnd = (int) (Math.ceil(page/10.0)) * 10;
         this.start = tempEnd - 9;
         this.prev = start > 1;
-        this.end = totalPage > tempEnd ? tempEnd : totalPage;
+        this.end = Math.min(totalPage, tempEnd);
         this.next = totalPage > tempEnd;
 
         this.pageList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());

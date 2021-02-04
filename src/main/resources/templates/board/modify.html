@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}">
+    <th:block th:fragment="content">
+        <form action="/board/modify" method="post">
+            <input type="hidden" th:value="${requestDTO.page}" name="page" />
+            <input type="hidden" th:value="${requestDTO.type}" name="type" />
+            <input type="hidden" th:value="${requestDTO.keyword}" name="keyword" />
+
+            <h1 class="mt-4">Board Modify Page</h1>
+            <div class="form-group">
+                <label>Bno</label>
+                <input type="text" class="form-control" th:value="${dto.bno}" name="bno" readonly />
+            </div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" th:value="${dto.title}" name="title" />
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea rows="5" class="form-control" name="content" >[[${dto.content}]]</textarea>
+            </div>
+            <div class="form-group">
+                <label>Writer</label>
+                <input type="text" class="form-control" th:value="${dto.writerName}" name="writer" readonly />
+            </div>
+            <div class="form-group">
+                <label>RegDate</label>
+                <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly />
+            </div>
+            <div class="form-group">
+                <label>ModDate</label>
+                <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly />
+            </div>
+        </form>
+
+        <button type="button" class="btn btn-primary modifyBtn">Modify</button>
+        <button type="button" class="btn btn-info listBtn">List</button>
+        <button type="button" class="btn btn-danger removeBtn">Remove</button>
+
+        <script th:inline="javascript">
+            let actionForm = $('form');
+
+            $('.removeBtn').on('click', () => {
+                actionForm
+                    .attr("action", "/board/remove")
+                    .attr("method", "post");
+
+                actionForm.submit();
+            });
+
+            $('.modifyBtn').on('click', () => {
+                if(!confirm('수정 하시겠습니까 ?')) {
+                    return ;
+                }
+
+                actionForm
+                    .attr('action', '/board/modify')
+                    .attr('method', 'post')
+                    .submit();
+            });
+
+            $('.listBtn').on('click', () => {
+                let pageInfo = $("input[name='page']");
+                let typeInfo = $("input[name='type']");
+                let keywordInfo = $("input[name='keyword']");
+
+                actionForm.empty();
+                actionForm.append(pageInfo);
+                actionForm.append(typeInfo);
+                actionForm.append(keywordInfo);
+                actionForm
+                    .attr('method', 'get')
+                    .attr('action', '/board/list')
+                    .submit();
+            });
+
+        </script>
+    </th:block>
+</th:block>
+</html>
